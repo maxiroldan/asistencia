@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asistencia UNCAUS</title>
+  <style>
+    :root {
+      --bg: #f3f6fb;
+      --card: #ffffff;
+      --text: #132338;
+      --muted: #5d6d80;
+      --accent: #005bbb;
+      --accent-hover: #004a97;
+      --border: #d8e0ea;
+      --ok: #13864d;
+      --err: #c23535;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+      background: linear-gradient(180deg, #eef3f9 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 1.2rem 1rem 2.2rem;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+      border-radius: 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+    .brand {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 0 0.2rem;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 1.1rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 8px 24px rgba(18, 35, 56, 0.08);
+    }
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .field { margin-bottom: 0.85rem; }
+    .input {
+      width: 100%;
+      min-height: 46px;
+      padding: 0.62rem 0.72rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 91, 187, 0.15);
+    }
+    .errors {
+      color: var(--err);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 0.45rem;
+      min-height: 48px;
+      padding: 0.78rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover { background: var(--accent-hover); }
+    .messages { list-style: none; padding: 0; margin: 0 0 1rem; }
+    .messages li {
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .messages .success {
+      background: rgba(19, 134, 77, 0.12);
+      color: var(--ok);
+      border: 1px solid rgba(19, 134, 77, 0.3);
+    }
+    .hint {
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .hint code {
+      background: #e8eef7;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      color: #1f3654;
+    }
+    .hint a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    @media (min-width: 600px) {
+      main { padding-top: 2rem; }
+      .card { padding: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="topbar">
+      <div class="logo">UNCAUS</div>
+      <p class="brand">Universidad Nacional del Chaco Austral</p>
+    </div>
+
+    <h1>Complete su asistencia</h1>
+    <!--<p class="sub">Completá DNI, apellido, nombre y fecha. Podés cargar varias asistencias para pruebas.</p>-->
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              <div class="errors">{{ field.errors|striptags }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit">Guardar asistencia</button>
+      </form>
+    </div>
+
+    <!--<p class="hint">
+      Para descargar Excel del día, abrí en el navegador:
+      <br><code>/excel/AAAA-MM-DD/</code>
+      <br>ejemplo: <code>/excel/2026-04-13/</code>
+      <br><a href="https://uncaus.edu.ar/" target="_blank" rel="noopener">Sitio oficial UNCAUS</a>
+    </p>-->
+  </main>
+</body>
+</html>
