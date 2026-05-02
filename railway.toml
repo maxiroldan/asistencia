@@ -1,4 +1,10 @@
-
-[deploy]
-preDeployCommand = "python manage.py migrate"
-startCommand = "gunicorn asistencia.wsgi --bind 0.0.0.0:$PORT"
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "preDeployCommand": "/app/.venv/bin/python manage.py migrate",
+    "startCommand": "gunicorn config.wsgi:application"
+  }
+}
