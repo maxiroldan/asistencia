@@ -4,5 +4,5 @@
 builder = "NIXPACKS"
 
 [deploy]
-preDeployCommand = "/app/.venv/bin/python manage.py migrate"
+preDeployCommand = "python manage.py migrate"
 startCommand = "gunicorn config.wsgi:application"
