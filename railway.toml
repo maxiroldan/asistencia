@@ -4,5 +4,5 @@
 builder = "NIXPACKS"
 
 [deploy]
-preDeployCommand = "python manage.py migrate && python manage.py shell -c \"from django.contrib.auth import get_user_model; User = get_user_model(); username = 'maxi'; password = 'prueba123'; user, _ = User.objects.get_or_create(username=username, defaults={'email': ''}); user.is_staff = True; user.is_superuser = True; user.set_password(password); user.save()\""
+preDeployCommand = "python manage.py migrate && python manage.py shell -c \"from django.contrib.auth import get_user_model; User = get_user_model(); username = 'admin'; password = 'R1verplate'; user, _ = User.objects.get_or_create(username=username, defaults={'email': ''}); user.is_staff = True; user.is_superuser = True; user.set_password(password); user.save()\""
 startCommand = "gunicorn config.wsgi:application"
